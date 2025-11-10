@@ -7,7 +7,7 @@ export interface ICard extends Document {
   expiryDate: string;
   cvvEncrypted: string;
   notes?: string;
-  ownerEmail: { type: string, required: true }
+  ownerEmail: { type: string, required: true };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,7 +20,7 @@ const CardSchema = new Schema<ICard>(
     expiryDate: { type: String, required: true },
     cvvEncrypted: { type: String, required: true },
     notes: { type: String },
-    ownerEmail: { type: String, required: true }
+    ownerEmail: { type: String, required: true },
   },
   { timestamps: true }
 );
