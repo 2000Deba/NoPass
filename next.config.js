@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  experimental: {
-    turbo: false
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -12,4 +8,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
