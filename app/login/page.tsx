@@ -242,7 +242,7 @@ export default function LoginPage() {
 
             <CardFooter className="bg-transparent p-4 text-center">
               <small className="text-xs text-muted-foreground">
-                By logging in you agree to our <Link href="/terms-and-conditions" className="underline">Terms</Link> and <Link href="/privacy-policy" className="underline">Privacy Policy</Link>.
+                By logging in you agree to our <Link href="/terms-and-conditions" className="underline">Terms</Link> and <Link href="/privacy-policy" className="underline">Privacy Policy</Link>
               </small>
             </CardFooter>
           </Card>
