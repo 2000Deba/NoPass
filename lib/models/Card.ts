@@ -7,7 +7,7 @@ export interface ICard extends Document {
   expiryDate: string;
   cvvEncrypted: string;
   notes?: string;
-  ownerEmail: { type: String, required: true }
+  ownerEmail: { type: string, required: true }
   createdAt: Date;
   updatedAt: Date;
 }
