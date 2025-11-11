@@ -5,6 +5,7 @@ import { contactSchema } from "@/lib/models/Contact"
 import { connectDB } from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/authOptions"
+import path from "path";
 
 export async function POST(req: Request) {
   try {
@@ -37,6 +38,10 @@ export async function POST(req: Request) {
       message: contactData.message,
     });
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    throw new Error("Mail credentials not configured");
+  }
+
     // Mail transport config
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -46,12 +51,9 @@ export async function POST(req: Request) {
       },
     });
 
-    // Auto-reply to user
-    await transporter.sendMail({
-      from: `"NoPass Support" <${process.env.EMAIL_USER}>`,
-      to: contactData.email,
-      subject: `We received your message: ${contactData.subject}`,
-      html: `
+    const logoPath = path.join(process.cwd(), "public", "NoPass.png");
+
+    const htmlContent = `
       <div style="font-family:Segoe UI,Arial,sans-serif; padding:0; margin:0; background:#f7f7f9;">
         <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.12);">
 
@@ -81,11 +83,18 @@ export async function POST(req: Request) {
 
         </div>
       </div>
-      `,
+      `;
+
+    // Auto-reply to user
+    await transporter.sendMail({
+      from: `"NoPass Support" <${process.env.EMAIL_USER}>`,
+      to: contactData.email,
+      subject: `We received your message: ${contactData.subject}`,
+      html: htmlContent,
       attachments: [
         {
           filename: "NoPass.png",
-          path: `${process.cwd()}/public/NoPass.png`,
+          path: logoPath,
           cid: "nopasslogo",
         },
       ],
