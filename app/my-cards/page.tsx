@@ -103,13 +103,21 @@ export default function MyCardsPage() {
   // Toggle visibility
   const toggleNumberVisibility = (id: string) => {
     const updated = new Set(visibleNumbers);
-    updated.has(id) ? updated.delete(id) : updated.add(id);
+    if (updated.has(id)) {
+      updated.delete(id);
+    } else {
+      updated.add(id);
+    }
     setVisibleNumbers(updated);
   };
 
   const toggleCVVVisibility = (id: string) => {
     const updated = new Set(visibleCVVs);
-    updated.has(id) ? updated.delete(id) : updated.add(id);
+    if (updated.has(id)) {
+      updated.delete(id);
+    } else {
+      updated.add(id);
+    }
     setVisibleCVVs(updated);
   };
 

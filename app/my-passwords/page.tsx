@@ -90,7 +90,11 @@ export default function MyPasswordsPage() {
   // Toggle password visibility
   const togglePasswordVisibility = (id: string) => {
     const updated = new Set(visiblePasswords);
-    updated.has(id) ? updated.delete(id) : updated.add(id);
+    if (updated.has(id)) {
+      updated.delete(id);
+    } else {
+      updated.add(id);
+    }
     setVisiblePasswords(updated);
   };
 
