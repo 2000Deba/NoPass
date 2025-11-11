@@ -52,7 +52,7 @@ interface EditCardData {
   cardholderName: string;
   cardNumber: string;
   expiryDate: string;
-  cvv: string;
+  cvv?: string;
 }
 
 interface AddCardProps {
