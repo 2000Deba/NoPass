@@ -91,7 +91,7 @@ export default function ResetPasswordClient() {
       } else {
         toast.error(data?.error || "Failed! Link expired or invalid.");
       }
-    } catch (err) {
+    } catch {
       toast.error("Server error. Try later.");
     } finally {
       setLoading(false);

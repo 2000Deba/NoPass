@@ -77,6 +77,11 @@ export default function RegisterPage() {
     setPwScore(getPasswordScore(watchedPassword));
   }, [watchedPassword]);
 
+  interface ServerFieldError {
+    field?: keyof RegisterFormValues;
+    message?: string;
+  }
+
   const onSubmit = async (values: RegisterFormValues) => {
     setLoading(true);
     try {
@@ -93,9 +98,9 @@ export default function RegisterPage() {
         reset();
         setTimeout(() => router.push("/login"), 3000);
       } else if (data && Array.isArray(data.errors)) {
-        data.errors.forEach((err: any) => {
+        data.errors.forEach((err: ServerFieldError) => {
           if (err.field) {
-            setError(err.field as any, { type: "server", message: err.message || "Invalid" });
+            setError(err.field, { type: "server", message: err.message || "Invalid" });
           } else {
             toast.error(err.message || "Registration failed! Please try again later.");
           }

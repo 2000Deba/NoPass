@@ -40,14 +40,20 @@ const formSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters long." }),
 });
 
+interface EditPasswordData {
+  _id: string;
+  website: string;
+  username: string;
+  password: string;
+}
 interface AddPasswordProps {
   onPasswordAdded?: () => void;
-  editData?: any | null;
+  editData?: EditPasswordData | null;
   onEditCancel?: () => void;
 }
 
 export function AddPassword({ onPasswordAdded, editData, onEditCancel }: AddPasswordProps) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,12 +98,12 @@ export function AddPassword({ onPasswordAdded, editData, onEditCancel }: AddPass
     try {
       const method = isEditMode ? "PUT" : "POST";
       // safety: if editing but no editData, abort
-      if (isEditMode && !editData?._id) {
+      if (isEditMode && (!editData || !editData._id)) {
         toast.error("Edit data missing. Please try again.");
         setLoading(false);
         return;
       }
-      const body = isEditMode ? { ...values, id: editData._id } : values;
+      const body = isEditMode ? { ...values, id: editData!._id } : values;
 
       const res = await fetch("/api/password", {
         method,

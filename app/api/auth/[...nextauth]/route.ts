@@ -72,7 +72,7 @@ export const authOptions: AuthOptions = {
     },
 
     // Attach DB user info (id, provider) into session.user
-    async session({ session }: any) {
+    async session({ session }: { session: any }) {
       await connectDB();
       if (session?.user?.email) {
         const dbUser = await User.findOne({ email: session.user.email });
@@ -105,7 +105,7 @@ export const authOptions: AuthOptions = {
           // otherwise allow the url (same origin)
           return url;
         }
-      } catch (e) {
+      } catch {
       }
       return baseUrl;
     },

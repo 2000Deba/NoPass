@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
             } else {
                 toast.error(data?.error || "Failed! Try again.");
             }
-        } catch (err) {
+        } catch {
             toast.error("Server error. Try later.");
         } finally {
             setLoading(false);

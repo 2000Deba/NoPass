@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -59,7 +59,7 @@ export default function MyCardsPage() {
   const maskCVV = (cvv?: string) => (cvv ? "•".repeat(cvv.length) : "•");
 
   // Fetch Cards
-  const fetchCards = async () => {
+  const fetchCards = useCallback(async () => {
     if (!session) {
       setCards([
         {
@@ -94,11 +94,11 @@ export default function MyCardsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session]);
 
   useEffect(() => {
     fetchCards();
-  }, [session]);
+  }, [fetchCards]);
 
   // Toggle visibility
   const toggleNumberVisibility = (id: string) => {
@@ -141,7 +141,7 @@ export default function MyCardsPage() {
         setCards((prev) => prev.filter((c) => c._id !== id));
         toast.success("Card deleted successfully");
       } else toast.error(result.error || "Failed to delete card");
-    } catch (err) {
+    } catch {
       toast.error("Error deleting card");
     }
   };

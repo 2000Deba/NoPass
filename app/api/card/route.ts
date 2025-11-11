@@ -56,8 +56,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true, data: created }, { status: 201 })
-  } catch (err: any) {
-    console.error("❌ POST /api/card error:", err)
+  } catch (err: unknown) {
+    console.error("❌ POST /api/card error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Server error" }, { status: 500 })
   }
 }
@@ -97,8 +97,8 @@ export async function GET(req: Request) {
     }));
 
     return NextResponse.json({ success: true, data: decryptedCards });
-  } catch (err: any) {
-    console.error("❌ GET /api/card error:", err)
+  } catch (err: unknown) {
+    console.error("❌ GET /api/card error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Server error" }, { status: 500 })
   }
 }
