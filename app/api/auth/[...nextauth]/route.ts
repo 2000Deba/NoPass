@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import { Session } from "next-auth";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -72,7 +73,7 @@ export const authOptions: AuthOptions = {
     },
 
     // Attach DB user info (id, provider) into session.user
-    async session({ session }: { session: any }) {
+    async session({ session }: { session: Session }) {
       await connectDB();
       if (session?.user?.email) {
         const dbUser = await User.findOne({ email: session.user.email });
