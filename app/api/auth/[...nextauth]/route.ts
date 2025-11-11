@@ -1,11 +1,20 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
-import { Session } from "next-auth";
+
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id?: string;
+      provider?: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -73,7 +82,7 @@ export const authOptions: AuthOptions = {
     },
 
     // Attach DB user info (id, provider) into session.user
-    async session({ session }: { session: Session }) {
+    async session({ session }) {
       await connectDB();
       if (session?.user?.email) {
         const dbUser = await User.findOne({ email: session.user.email });
@@ -89,7 +98,7 @@ export const authOptions: AuthOptions = {
     },
 
     // Robust redirect handler
-    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+    async redirect({ url, baseUrl }) {
       // If url is relative (starts with "/"), resolve to full url
       if (url.startsWith("/")) {
         return `${baseUrl}${url}`;
@@ -100,9 +109,9 @@ export const authOptions: AuthOptions = {
         const dest = new URL(url);
         if (dest.origin === baseUrl) {
           // if this is a NextAuth callback path, redirect to baseUrl (home)
-          if (dest.pathname.startsWith("/api/auth/")) {
+          if (dest.pathname.startsWith("/api/auth/")) 
             return baseUrl;
-          }
+          
           // otherwise allow the url (same origin)
           return url;
         }
