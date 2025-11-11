@@ -46,7 +46,12 @@ export async function POST(req: Request) {
       },
     });
 
-    const htmlContent = `
+    // Auto-reply to user
+    await transporter.sendMail({
+      from: `"NoPass Support" <${process.env.EMAIL_USER}>`,
+      to: contactData.email,
+      subject: `We received your message: ${contactData.subject}`,
+      html: `
       <div style="font-family:Segoe UI,Arial,sans-serif; padding:0; margin:0; background:#f7f7f9;">
         <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.12);">
 
@@ -76,14 +81,7 @@ export async function POST(req: Request) {
 
         </div>
       </div>
-      `;
-
-    // Auto-reply to user
-    await transporter.sendMail({
-      from: `"NoPass Support" <${process.env.EMAIL_USER}>`,
-      to: contactData.email,
-      subject: `We received your message: ${contactData.subject}`,
-      html: htmlContent,
+      `,
       attachments: [
         {
           filename: "NoPass.png",

@@ -9,7 +9,11 @@ export async function sendResetEmail(to: string, resetLink: string) {
     },
   });
 
-  const htmlContent = `
+  await transporter.sendMail({
+    from: `"NoPass Security" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "Reset your NoPass account password",
+    html: `
   <div style="background:#f7f7f7; padding-bottom:40px; font-family: 'Segoe UI', Arial, sans-serif;">
     <div style="max-width:600px; margin:auto; background:#ffffff; padding:32px; border-radius:12px; border:1px solid #e5e5e5;">
 
@@ -51,13 +55,7 @@ export async function sendResetEmail(to: string, resetLink: string) {
       &nbsp;Copyright © ${new Date().getFullYear()} NoPass. All Rights Reserved.
     </p>
   </div>
-  `;
-
-  await transporter.sendMail({
-    from: `"NoPass Security" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: "Reset your NoPass account password",
-    html: htmlContent,
+  `,
     attachments: [
       {
         filename: "NoPass.png",
