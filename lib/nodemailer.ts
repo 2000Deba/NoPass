@@ -1,6 +1,12 @@
 import nodemailer from "nodemailer";
+import path from "path";
 
 export async function sendResetEmail(to: string, resetLink: string) {
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    throw new Error("Mail credentials not configured");
+  }
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -9,11 +15,9 @@ export async function sendResetEmail(to: string, resetLink: string) {
     },
   });
 
-  await transporter.sendMail({
-    from: `"NoPass Security" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: "Reset your NoPass account password",
-    html: `
+  const logoPath = path.join(process.cwd(), "public", "NoPass.png");
+
+  const htmlContent = `
   <div style="background:#f7f7f7; padding-bottom:40px; font-family: 'Segoe UI', Arial, sans-serif;">
     <div style="max-width:600px; margin:auto; background:#ffffff; padding:32px; border-radius:12px; border:1px solid #e5e5e5;">
 
@@ -55,11 +59,17 @@ export async function sendResetEmail(to: string, resetLink: string) {
       &nbsp;Copyright © ${new Date().getFullYear()} NoPass. All Rights Reserved.
     </p>
   </div>
-  `,
+  `;
+
+  await transporter.sendMail({
+    from: `"NoPass Security" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "Reset your NoPass account password",
+    html: htmlContent,
     attachments: [
       {
         filename: "NoPass.png",
-        path: `${process.cwd()}/public/NoPass.png`,
+        path: logoPath,
         cid: "nopasslogo",
       },
     ],
