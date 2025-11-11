@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongodb"
 import { Password } from "@/lib/models/Password"
 import { z } from "zod"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "../auth/authOptions"
 import { encrypt, decrypt } from "@/lib/crypto";
 
 // Validation schema
