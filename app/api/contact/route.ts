@@ -95,8 +95,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
 
-  } catch (error: any) {
-    console.log("CONTACT API ERROR:", error);
+  } catch (error: unknown) {
+    console.error("CONTACT API ERROR:", error instanceof Error ? error.message : error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

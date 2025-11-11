@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import {
   Card,
@@ -47,12 +47,12 @@ export function YourPasswords({ refreshTrigger }: YourPasswordsProps) {
       if (hex && /^[0-9a-fA-F]+$/.test(hex)) {
         return parseInt(hex, 16) * 1000;
       }
-    } catch (e) { }
+    } catch { }
     return 0;
   };
 
   // Fetch passwords from API
-  const fetchPasswords = async () => {
+  const fetchPasswords = useCallback(async () => {
     if (!session) {
       // If there is no session, only show demo data.
       setPasswords([
@@ -91,7 +91,7 @@ export function YourPasswords({ refreshTrigger }: YourPasswordsProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session]);
 
   // Fetch on mount or refreshTrigger change
   useEffect(() => {
@@ -101,7 +101,7 @@ export function YourPasswords({ refreshTrigger }: YourPasswordsProps) {
       if (!active) return;
     })();
     return () => { active = false };
-  }, [session, refreshTrigger]);
+  }, [fetchPasswords, refreshTrigger]);
 
   // Delete password
   const handleDelete = async (id: string) => {

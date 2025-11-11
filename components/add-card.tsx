@@ -47,14 +47,22 @@ const formSchema = z.object({
   cardholderName: z.string().min(2, { message: "Cardholder name is required." }),
 })
 
+interface EditCardData {
+  _id: string;
+  cardholderName: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+}
+
 interface AddCardProps {
-  onCardAdded?: () => void
-  editData?: any | null
-  onEditCancel?: () => void
+  onCardAdded?: () => void;
+  editData?: EditCardData | null;
+  onEditCancel?: () => void;
 }
 
 export function AddCard({ onCardAdded, editData, onEditCancel }: AddCardProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -88,7 +96,7 @@ export function AddCard({ onCardAdded, editData, onEditCancel }: AddCardProps) {
       })
       setIsEditMode(false)
     }
-  }, [editData, form]) 
+  }, [editData, form])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (status !== "authenticated") {
@@ -100,12 +108,12 @@ export function AddCard({ onCardAdded, editData, onEditCancel }: AddCardProps) {
     try {
       const method = isEditMode ? "PUT" : "POST";
       // safety: if editing but no editData, abort
-      if (isEditMode && !editData?._id) {
+      if (isEditMode && (!editData || !editData._id)) {
         toast.error("Edit data missing. Please try again.");
         setLoading(false);
         return;
       }
-      const body = isEditMode ? { ...values, id: editData._id } : values;
+      const body = isEditMode ? { ...values, id: editData!._id } : values;
 
       const res = await fetch("/api/card", {
         method,

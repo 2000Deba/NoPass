@@ -44,9 +44,12 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json({ success: true, data: created }, { status: 201 })
-  } catch (err: any) {
-    console.error("❌ API /api/password error:", err)
-    return NextResponse.json({ error: "Server error", message: err.message }, { status: 500 })
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Server error";
+
+    console.error("❌ API /api/password error:", message);
+    return NextResponse.json({ error: "Server error", message }, { status: 500 });
   }
 }
 
@@ -83,9 +86,12 @@ export async function GET(req: Request) {
     }))
 
     return NextResponse.json({ success: true, data: list }, { status: 200 })
-  } catch (err: any) {
-    console.error("❌ GET /api/password error:", err)
-    return NextResponse.json({ error: "Server error", message: err.message }, { status: 500 })
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Server error";
+
+    console.error("❌ GET /api/password error:", message);
+    return NextResponse.json({ error: "Server error", message }, { status: 500 });
   }
 }
 

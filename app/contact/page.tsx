@@ -36,6 +36,8 @@ const contactSchema = z.object({
     .max(1200, { message: "Message cannot exceed 1200 characters." }),
 });
 
+type ContactFormData = z.infer<typeof contactSchema>;
+
 export default function ContactPage() {
   const { data: session } = useSession();
 
@@ -44,9 +46,9 @@ export default function ContactPage() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: zodResolver(contactSchema) });
+  } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ContactFormData) => {
     if (!session) return toast.error("You must be logged in to send a message.");
 
     // Email mismatch check

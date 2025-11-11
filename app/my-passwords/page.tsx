@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -47,7 +47,7 @@ export default function MyPasswordsPage() {
   };
 
   // Fetch Passwords
-  const fetchPasswords = async () => {
+  const fetchPasswords = useCallback(async () => {
     if (!session) {
       setPasswords([
         {
@@ -81,11 +81,11 @@ export default function MyPasswordsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session]);
 
   useEffect(() => {
     fetchPasswords();
-  }, [session]);
+  }, [fetchPasswords]);
 
   // Toggle password visibility
   const togglePasswordVisibility = (id: string) => {
@@ -116,7 +116,7 @@ export default function MyPasswordsPage() {
         setPasswords((prev) => prev.filter((p) => p._id !== id));
         toast.success("Password deleted successfully");
       } else toast.error(result.error || "Failed to delete password");
-    } catch (err) {
+    } catch {
       toast.error("Error deleting password");
     }
   };

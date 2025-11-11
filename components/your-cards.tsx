@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import {
   Card,
@@ -51,7 +51,7 @@ export function YourCards({ refreshTrigger }: YourCardsProps) {
       if (hex && /^[0-9a-fA-F]+$/.test(hex)) {
         return parseInt(hex, 16) * 1000;
       }
-    } catch (e) { }
+    } catch { }
     return 0;
   };
 
@@ -75,7 +75,7 @@ export function YourCards({ refreshTrigger }: YourCardsProps) {
   // Fetch
   // -------------------
 
-  const fetchCards = async () => {
+  const fetchCards = useCallback(async () => {
     if (!session) {
       setCards([
         {
@@ -109,7 +109,7 @@ export function YourCards({ refreshTrigger }: YourCardsProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session]);
 
   useEffect(() => {
     let active = true;
@@ -118,7 +118,7 @@ export function YourCards({ refreshTrigger }: YourCardsProps) {
       if (!active) return;
     })();
     return () => { active = false };
-  }, [session, refreshTrigger]);
+  }, [fetchCards, refreshTrigger]);
 
   // -------------------
   // Actions
