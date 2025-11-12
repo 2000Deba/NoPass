@@ -20,8 +20,49 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'NoPass - Password Manager',
-  description: 'Securely store and manage your passwords and credit cards in one place.',
+  title: 'NoPass | Secure Password Manager',
+  description: 'NoPass lets you securely store and manage all your passwords and credit cards in one encrypted place. Simple, fast, and private — built with Next.js and MongoDB.',
+  keywords: [
+    'NoPass',
+    'password manager',
+    'secure storage',
+    'data security',
+    'password vault',
+    'privacy tool',
+    'Next.js',
+    'MongoDB',
+    'TailwindCSS',
+    'NextAuth',
+  ],
+  authors: [{ name: 'Debasish Seal' }],
+  creator: 'Debasish Seal',
+  publisher: 'Debasish Seal',
+  metadataBase: new URL('https://nopass-deba.vercel.app'),
+  openGraph: {
+    title: 'NoPass | Secure Password Manager',
+    description:
+      'NoPass helps you store and organize all your passwords and cards safely. Access anywhere, anytime — securely.',
+    url: 'https://nopass-deba.vercel.app',
+    siteName: 'NoPass',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'NoPass - Password Manager',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NoPass | Secure Password Manager',
+    description:
+      'Manage and protect all your passwords and credit cards with NoPass. Privacy-first, easy to use.',
+    images: ['/og-image.png'],
+    creator: '@ShilDebasish',
+  },
 }
 
 export default function RootLayout({
