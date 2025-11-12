@@ -11,10 +11,10 @@ import {
 
 export default function Footer() {
   const socials = [
-    { Icon: FaFacebook, url: "https://facebook.com", label: "Facebook" },
-    { Icon: FaTwitter, url: "https://twitter.com", label: "Twitter" },
-    { Icon: FaInstagram, url: "https://instagram.com", label: "Instagram" },
-    { Icon: FaLinkedin, url: "https://linkedin.com", label: "LinkedIn" },
+    { Icon: FaFacebook, url: "https://www.facebook.com/share/19h1bGQxvK/", label: "Facebook" },
+    { Icon: FaTwitter, url: "https://x.com/shildebasish", label: "Twitter" },
+    { Icon: FaInstagram, url: "https://www.instagram.com/sildebasish02?igsh=MWN4dmdkZDZvNjYxMg==", label: "Instagram" },
+    { Icon: FaLinkedin, url: "https://in.linkedin.com/in/debasishseal", label: "LinkedIn" },
     { Icon: FaGithub, url: "https://github.com/2000Deba", label: "GitHub" },
   ];
 
@@ -51,8 +51,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 rounded-full"
-              >
+                className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 rounded-full">
                 <Icon className="w-6 h-6 text-foreground hover:text-yellow-300 transition-colors" />
               </Link>
             ))}
