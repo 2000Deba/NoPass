@@ -20,9 +20,7 @@ It allows users to **store, manage, and protect passwords and credit or debit ca
 <img src="./public/cards-page.jpg" alt="Cards Page" width="800" />
 
 ### Dark Mode Support  
-<div align="center">
-    <img src="./public/dark-mode.jpg" width="500" alt="Dark Mode View"/>
-</div>
+<img src="./public/dark-mode.jpg" width="800" alt="Dark Mode View"/>
 
 ---
 
