@@ -1,6 +1,16 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const PasswordSchema = new Schema(
+export interface IPassword extends Document {
+  website: string;
+  username: string;
+  password: string;
+  notes?: string;
+  ownerEmail: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const PasswordSchema = new Schema<IPassword>(
   {
     website: { type: String, required: true },
     username: { type: String, required: true },
@@ -11,5 +21,8 @@ const PasswordSchema = new Schema(
   { timestamps: true }
 );
 
-export const Password =
-  models.Password || mongoose.model("Password", PasswordSchema);
+// Prevent model overwrite errors during hot reload
+export const Password: Model<IPassword> =
+  mongoose.models.Password || mongoose.model<IPassword>("Password", PasswordSchema);
+
+export default Password;
