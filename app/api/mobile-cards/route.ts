@@ -38,24 +38,46 @@ const bodySchema = z.object({
 });
 
 // Helper to extract verified email from bearer token
-async function getEmailFromToken(): Promise<string | null> {
+// async function getEmailFromToken(): Promise<string | null> {
+//   try {
+//     const headerList = await headers();
+//     const authHeader = headerList.get("authorization");
+
+//     if (!authHeader || !authHeader.startsWith("Bearer "))
+//       return null;
+
+//     const token = authHeader.split(" ")[1];
+
+//     const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as MobileJwtPayload;
+
+//     if (!decoded || !decoded.email) return null;
+
+//     return decoded.email;
+//   } catch (err) {
+//     console.error("JWT verification failed:", err);
+//     return null;
+//   }
+// }
+
+async function getEmailFromToken(fallbackEmail?: string): Promise<string | null> {
   try {
     const headerList = await headers();
     const authHeader = headerList.get("authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer "))
-      return null;
+      return fallbackEmail ?? null;
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as MobileJwtPayload;
+    const decoded = jwt.verify(
+      token,
+      process.env.NEXTAUTH_SECRET!
+    ) as MobileJwtPayload;
 
-    if (!decoded || !decoded.email) return null;
-
-    return decoded.email;
+    return decoded?.email ?? fallbackEmail ?? null;
   } catch (err) {
-    console.error("JWT verification failed:", err);
-    return null;
+    console.error("JWT verification failed, using fallback email");
+    return fallbackEmail ?? null;
   }
 }
 
@@ -111,25 +133,62 @@ export async function GET(req: Request) {
 }
 
 /* ---------------- POST ---------------- */
+// export async function POST(req: Request) {
+//   try {
+//     // Verify token (required for create)
+//     const tokenEmail = await getEmailFromToken();
+//     if (!tokenEmail) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+
+//     const json = await req.json();
+//     const parsed = bodySchema.safeParse(json);
+
+//     if (!parsed.success)
+//       return NextResponse.json({ success: false, issues: parsed.error.flatten() }, { status: 422 });
+
+//     await connectDB();
+//     const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
+
+//     const cleanCardNumber = sanitizeCardNumber(cardNumber);
+
+//     const created = await Card.create({
+//       ownerEmail: tokenEmail,
+//       cardholderName,
+//       cardNumberEncrypted: encrypt(cleanCardNumber),
+//       cardNumberLast4: cleanCardNumber.slice(-4),
+//       expiryDate,
+//       cvvEncrypted: encrypt(cvv),
+//       notes,
+//     });
+
+//     return NextResponse.json({ success: true, data: created }, { status: 201 });
+//   } catch (err) {
+//     console.error("❌ POST mobile-cards:", err);
+//     return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+//   }
+// }
+
 export async function POST(req: Request) {
   try {
-    // Verify token (required for create)
-    const tokenEmail = await getEmailFromToken();
-    if (!tokenEmail) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-
     const json = await req.json();
-    const parsed = bodySchema.safeParse(json);
 
+    // 👇 TEMP: fallback email from body
+    const emailFromBody = json.ownerEmail;
+
+    const email = await getEmailFromToken(emailFromBody);
+    if (!email)
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+
+    const parsed = bodySchema.safeParse(json);
     if (!parsed.success)
       return NextResponse.json({ success: false, issues: parsed.error.flatten() }, { status: 422 });
 
     await connectDB();
-    const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
 
-    const cleanCardNumber = sanitizeCardNumber(cardNumber);
+    const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
+    const cleanCardNumber = cardNumber.replace(/\s+/g, "");
 
     const created = await Card.create({
-      ownerEmail: tokenEmail,
+      ownerEmail: email,
       cardholderName,
       cardNumberEncrypted: encrypt(cleanCardNumber),
       cardNumberLast4: cleanCardNumber.slice(-4),
@@ -146,29 +205,75 @@ export async function POST(req: Request) {
 }
 
 /* ---------------- PUT ---------------- */
+// export async function PUT(req: Request) {
+//   try {
+//     // Verify token (required for update)
+//     const tokenEmail = await getEmailFromToken();
+//     if (!tokenEmail) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+
+//     const json = await req.json();
+//     const { id, ...rest } = json;
+
+//     if (!id)
+//       return NextResponse.json({ success: false, message: "Missing card ID" }, { status: 400 });
+
+//     const parsed = bodySchema.safeParse(rest);
+//     if (!parsed.success)
+//       return NextResponse.json({ success: false, issues: parsed.error.flatten() }, { status: 422 });
+
+//     await connectDB();
+//     const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
+
+//     const cleanCardNumber = sanitizeCardNumber(cardNumber);
+
+//     const updated = await Card.findOneAndUpdate(
+//       { _id: id, ownerEmail: tokenEmail }, // ensure owner matches token
+//       {
+//         $set: {
+//           cardholderName,
+//           cardNumberEncrypted: encrypt(cleanCardNumber),
+//           cardNumberLast4: cleanCardNumber.slice(-4),
+//           expiryDate,
+//           cvvEncrypted: encrypt(cvv),
+//           notes,
+//         },
+//       },
+//       { new: true }
+//     );
+
+//     if (!updated)
+//       return NextResponse.json({ success: false, message: "Card not found" }, { status: 404 });
+
+//     return NextResponse.json({ success: true, data: updated });
+//   } catch (err) {
+//     console.error("❌ PUT mobile-cards:", err);
+//     return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+//   }
+// }
+
 export async function PUT(req: Request) {
   try {
-    // Verify token (required for update)
-    const tokenEmail = await getEmailFromToken();
-    if (!tokenEmail) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-
     const json = await req.json();
-    const { id, ...rest } = json;
+    const { id, ownerEmail, ...rest } = json;
 
     if (!id)
       return NextResponse.json({ success: false, message: "Missing card ID" }, { status: 400 });
+
+    const email = await getEmailFromToken(ownerEmail);
+    if (!email)
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
 
     const parsed = bodySchema.safeParse(rest);
     if (!parsed.success)
       return NextResponse.json({ success: false, issues: parsed.error.flatten() }, { status: 422 });
 
     await connectDB();
-    const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
 
-    const cleanCardNumber = sanitizeCardNumber(cardNumber);
+    const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
+    const cleanCardNumber = cardNumber.replace(/\s+/g, "");
 
     const updated = await Card.findOneAndUpdate(
-      { _id: id, ownerEmail: tokenEmail }, // ensure owner matches token
+      { _id: id, ownerEmail: email },
       {
         $set: {
           cardholderName,
