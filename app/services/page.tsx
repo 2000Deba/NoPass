@@ -2,11 +2,25 @@
 
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Shield, Key, Laptop, Zap } from "lucide-react"
+import { Shield, Key, Laptop, Zap, Download, Smartphone, QrCode } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 export default function ServicesPage() {
+    const [showMobileCTA, setShowMobileCTA] = useState(false)
+
+    useEffect(() => {
+        if (typeof navigator !== "undefined") {
+            const isAndroid = /Android/i.test(navigator.userAgent)
+            setShowMobileCTA(isAndroid)
+        }
+    }, [])
+
+    const APK_URL = "https://nopass-deba.vercel.app/downloads/NoPassMobile-v1.0.1.apk"
+    const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(APK_URL)}`
+
     const services = [
         {
             icon: <Shield className="w-10 h-10 text-primary" />,
@@ -110,12 +124,66 @@ export default function ServicesPage() {
                 transition={{ delay: 0.3, duration: 0.6 }}
                 viewport={{ once: true }}
                 className="mt-20 relative z-10">
+                <Card className="border-primary/30 backdrop-blur bg-muted/40">
+                    <CardHeader className="space-y-4 text-center">
+                        <QrCode className="w-10 h-10 mx-auto text-primary" />
+                        <CardTitle className="text-2xl">
+                            Install NoPass Android App
+                        </CardTitle>
+                        <CardDescription>
+                            Scan the QR code to download the official NoPass Android app.
+                            Secured & verified by Google Play Protect.
+                        </CardDescription>
+
+                        {/* QR Code */}
+                        <div className="flex justify-center">
+                            <Image
+                                src={QR_URL}
+                                alt="Scan to download NoPass Android App"
+                                width={160}
+                                height={160}
+                                unoptimized
+                                className="rounded-lg border"
+                            />
+                        </div>
+
+                        {/* Play Protect Image */}
+                        <div className="flex justify-center">
+                            <Image
+                                src="/play-protect-scan.png"
+                                alt="Google Play Protect Scan Result"
+                                width={260}
+                                height={160}
+                                className="rounded-md"
+                            />
+                        </div>
+
+                        {/* 📱 Mobile only download button */}
+                        {showMobileCTA && (
+                            <Link href="/downloads/NoPassMobile-v1.0.1.apk">
+                                <Button size="lg" className="gap-2 mt-4 md:hidden">
+                                    <Download size={18} />
+                                    Download APK
+                                </Button>
+                            </Link>
+                        )}
+
+                        {/* Desktop hint */}
+                        <p className="text-xs text-muted-foreground hidden md:block">
+                            Desktop user? Scan the QR code using your mobile device.
+                        </p>
+                    </CardHeader>
+                </Card>
+            </motion.div>
+
+            {/* Final CTA */}
+            <div className="mt-24">
                 <Link href="/">
-                    <Button size="lg" className="text-lg px-8">
-                        Get Started with NoPass
+                    <Button size="lg" variant="secondary">
+                        Continue on Web
                     </Button>
                 </Link>
-            </motion.div>
+            </div>
         </div>
     )
 }

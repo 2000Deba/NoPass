@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import DownloadAppBanner from '@/components/DownloadAppBanner'
 import { ThemeProvider } from '@/components/theme-provider'
 import { PasswordsProvider } from './context/PasswordsContext'
 import { CardsProvider } from './context/CardsContext'
@@ -73,6 +74,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Android-only App Download Banner */}
+        <DownloadAppBanner />
         <Toaster />
         <Providers>
           <ThemeProvider
