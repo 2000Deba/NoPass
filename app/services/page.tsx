@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Shield, Key, Laptop, Zap, Download, Smartphone, QrCode } from "lucide-react"
+import { Shield, Key, Laptop, Zap, Download, QrCode } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
