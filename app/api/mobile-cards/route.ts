@@ -59,6 +59,11 @@ async function getEmailFromToken(): Promise<string | null> {
   }
 }
 
+// Remove spaces from card number (mobile sends formatted value)
+function sanitizeCardNumber(cardNumber: string) {
+  return cardNumber.replace(/\s+/g, "");
+}
+
 /* ---------------- GET ---------------- */
 export async function GET(req: Request) {
   try {
@@ -121,11 +126,13 @@ export async function POST(req: Request) {
     await connectDB();
     const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
 
+    const cleanCardNumber = sanitizeCardNumber(cardNumber);
+
     const created = await Card.create({
       ownerEmail: tokenEmail,
       cardholderName,
-      cardNumberEncrypted: encrypt(cardNumber),
-      cardNumberLast4: cardNumber.slice(-4),
+      cardNumberEncrypted: encrypt(cleanCardNumber),
+      cardNumberLast4: cleanCardNumber.slice(-4),
       expiryDate,
       cvvEncrypted: encrypt(cvv),
       notes,
@@ -158,13 +165,15 @@ export async function PUT(req: Request) {
     await connectDB();
     const { cardholderName, cardNumber, expiryDate, cvv, notes } = parsed.data;
 
+    const cleanCardNumber = sanitizeCardNumber(cardNumber);
+
     const updated = await Card.findOneAndUpdate(
       { _id: id, ownerEmail: tokenEmail }, // ensure owner matches token
       {
         $set: {
           cardholderName,
-          cardNumberEncrypted: encrypt(cardNumber),
-          cardNumberLast4: cardNumber.slice(-4),
+          cardNumberEncrypted: encrypt(cleanCardNumber),
+          cardNumberLast4: cleanCardNumber.slice(-4),
           expiryDate,
           cvvEncrypted: encrypt(cvv),
           notes,
