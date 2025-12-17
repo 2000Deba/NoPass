@@ -41,7 +41,7 @@ export default function DownloadAppBanner() {
 
                 <div className="flex items-center gap-3">
                     <Link
-                        href="/downloads/NoPassMobile-v1.0.1.apk"
+                        href="https://github.com/2000Deba/NoPassMobile/releases/download/v1.0.1/NoPassMobile-v1.0.1.apk"
                         className="flex items-center gap-1 bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-xs font-medium">
                         <Download size={14} />
                         Download

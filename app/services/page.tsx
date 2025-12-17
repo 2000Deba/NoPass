@@ -18,7 +18,7 @@ export default function ServicesPage() {
         }
     }, [])
 
-    const APK_URL = "https://nopass-deba.vercel.app/downloads/NoPassMobile-v1.0.1.apk"
+    const APK_URL = "https://github.com/2000Deba/NoPassMobile/releases/download/v1.0.1/NoPassMobile-v1.0.1.apk"
     const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(APK_URL)}`
 
     const services = [
@@ -160,7 +160,7 @@ export default function ServicesPage() {
 
                         {/* 📱 Mobile only download button */}
                         {showMobileCTA && (
-                            <Link href="/downloads/NoPassMobile-v1.0.1.apk">
+                            <Link href="https://github.com/2000Deba/NoPassMobile/releases/download/v1.0.1/NoPassMobile-v1.0.1.apk">
                                 <Button size="lg" className="gap-2 mt-4 md:hidden">
                                     <Download size={18} />
                                     Download APK
