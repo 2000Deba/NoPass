@@ -1,5 +1,10 @@
 # 🔐 NoPass
 
+> ⚠️ **IMPORTANT NOTICE**  
+> This project is **source-available**, NOT open-source.  
+> Deployment, redistribution, rebranding, or reuse is strictly prohibited  
+> without explicit written permission from the author.
+
 **NoPass** is a secure and modern **Password & Card Manager** built with **Next.js, TypeScript, MongoDB, NextAuth, ShadCN/UI, and TailwindCSS**.  
 It allows users to **store, manage, and protect passwords and credit or debit card details** — all in one encrypted, user-friendly dashboard.
 
@@ -38,22 +43,30 @@ It allows users to **store, manage, and protect passwords and credit or debit ca
   - Password reset via email with token expiry system  
 
 - 🧠 **Password Management**
-  - Securely save, view, and manage card info
+  - Securely save, view, and manage password info
   - Add, edit, and delete saved passwords
-  - Auto-prefill edit mode with instant updates  
+  - Encrypted storage
+  - Auto-prefill edit mode with instant UI updates  
 
 - 💳 **Credit/Debit Card Management**
   - Securely save, view, and manage card info
   - Add, edit, and delete saved cards
-  - Auto-prefill edit mode with instant updates  
+  - Encrypted storage
+  - Auto-prefill edit mode with instant UI updates  
 
-- 🌗 **Dark / Light Mode Support**
+- 🌗 **Dark / Light Mode Support (Clean UI, accessibility & UX)**
+- Dark / Light mode
+- Clean, accessible UI (ShadCN/UI)
+- Smooth animations (Framer Motion)
 
 - 📩 **Contact Support Page**
-  - Auto email response with embedded logo  
+  - Auto email response with embedded logo and branding 
   - Authenticated user message validation  
+  - Authenticated form submission
 
-- 🗄 **MongoDB Integration** for persistent data storage  
+- 🗄 **MongoDB Integration (Database)** 
+- for persistent data storage  
+- MongoDB with optimized schema design
 
 - ⚡ **Deployed on Vercel**
 
@@ -76,6 +89,10 @@ It allows users to **store, manage, and protect passwords and credit or debit ca
 ---
 
 ## ⚙️ Installation & Setup
+
+
+> ⚠️ This section is provided **only for learning and contribution purposes**.  
+> Deployment or production use is **not allowed**.
 
 1. **Clone the repository**
    ```bash
@@ -102,6 +119,11 @@ It allows users to **store, manage, and protect passwords and credit or debit ca
     GITHUB_SECRET=your_github_client_secret
     EMAIL_USER=yourgmail@gmail.com
     EMAIL_PASS=xxxx xxxx xxxx xxxx   # App Password (must be entered without spaces)
+    MOBILE_API_URL=http://192.168.x.x:3000
+    GITHUB_MOBILE_ID=your_github_mobile_client_id
+    GITHUB_MOBILE_SECRET=your_github_mobile_secret
+    GOOGLE_MOBILE_CLIENT_ID=your_google_mobile_client_id
+    GOOGLE_MOBILE_CLIENT_SECRET=your_google_mobile_client_secret
     ```
 
     > Make sure to replace `your_mongodb_connection_string` with your actual MongoDB connection URI.
@@ -115,10 +137,27 @@ The app will be available at 👉 http://localhost:3000
 
 ---
 
-## 📦 Deployment
+## 📦 Deployment Notes
 
-- Deploy easily on **Vercel** by connecting your GitHub repository.
-Vercel will automatically build and deploy your project.
+- This project is deployed on **Vercel** for personal and demonstration purposes.
+
+- Due to encryption keys, authentication providers, and email configurations,
+this repository is **not intended for public or private redeployment under any name, domain, or branding**.
+
+## 🔐 Usage Policy
+
+- Viewing and learning: ✅ Allowed
+
+- Contributions (PRs): ⚠️ Allowed (all contributions become property of the author).
+
+- By submitting a pull request, you agree that your contribution
+becomes part of the project and is subject to the same license terms.
+
+- Forking: ⚠️ Allowed by GitHub, not permission to reuse
+
+- Deployment / Rebranding / Commercial use: ❌ Not allowed
+
+All forked copies remain bound to the same license terms.
 
 ---
 
@@ -127,8 +166,31 @@ Vercel will automatically build and deploy your project.
 **👤 Debasish Seal**
 
 - GitHub: [@2000Deba](https://github.com/2000Deba)
+- Portfolio: [Portfolio](https://debasishseal.vercel.app/)
 - Live Demo: [NoPass](https://nopass-deba.vercel.app/)
 
 ---
 
-### ⭐ Don't forget to star this repo if you like it!
+## 📜 License
+
+This project is **source-available under a custom license**.
+It is **NOT open-source**.
+
+You are allowed to view and contribute to this repository for learning
+and contribution purposes only.
+
+❌ Reuse, redistribution, rebranding, modification, or commercial use is **not allowed**
+without explicit permission from the author.
+
+Modification is allowed only for local learning or contribution purposes.
+Modified versions may NOT be deployed, redistributed, or published.
+
+See the [LICENSE](./LICENSE) file for full legal terms and details.
+
+---
+
+### ⭐ Support
+
+Don't forget to ⭐ star this repo if you like it!
+
+For bugs or feature requests, feel free to open an issue.
