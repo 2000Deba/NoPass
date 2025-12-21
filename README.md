@@ -90,7 +90,6 @@ It allows users to **store, manage, and protect passwords and credit or debit ca
 
 ## ⚙️ Installation & Setup
 
-
 > ⚠️ This section is provided **only for learning and contribution purposes**.  
 > Deployment or production use is **not allowed**.
 
